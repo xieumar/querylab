@@ -1,28 +1,35 @@
 #!/usr/bin/env sh
 
-echo 'í¾¨ Checking code formatting...'
+branch="$(git rev-parse --abbrev-ref HEAD)"
+if [ "$branch" = "main" ] || [ "$branch" = "dev" ]; then
+  echo "âŒ Direct commits to '$branch' are not allowed."
+  echo " Please create a feature/fix branch."
+  exit 1
+fi
+
+echo 'ï¿½ï¿½ï¿½ Checking code formatting...'
 pnpm format:check ||
 (
     echo 'âŒ Prettier check failed!'
-    echo 'í²¡ Run: pnpm format'
+    echo 'ï¿½ï¿½ï¿½ Run: pnpm format'
     echo ''
     exit 1
 )
 
-echo 'í´ Running ESLint...'
+echo 'ï¿½ï¿½ï¿½ Running ESLint...'
 pnpm lint ||
 (
     echo 'âŒ ESLint check failed!'
-    echo 'ï¿½ï¿½ Fix the errors above or run: pnpm lint:fix'
+    echo 'ï¿½ï¿½ï¿½ Fix the errors above or run: pnpm lint:fix'
     echo ''
     exit 1
 )
 
-echo 'í´ Checking TypeScript types...'
+echo 'ï¿½ï¿½ï¿½ Checking TypeScript types...'
 pnpm type-check ||
 (
     echo 'âŒ TypeScript check failed!'
-    echo 'í²¡ Fix the type errors above'
+    echo 'ï¿½ï¿½ï¿½ Fix the type errors above'
     echo ''
     exit 1
 )

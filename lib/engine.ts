@@ -64,11 +64,10 @@ const evaluateNode = (node: QueryNode, data: Record<string, any>): boolean => {
   return true;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const executeQuery = (
+export const executeQuery = <T extends Record<string, unknown>>(
   tree: QueryTree,
-  dataset: any[]
-): { results: any[]; executionTimeMs: number } => {
+  dataset: T[]
+): { results: T[]; executionTimeMs: number } => {
   const start = performance.now();
 
   const results = dataset.filter((row) => evaluateNode(tree, row));

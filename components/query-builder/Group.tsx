@@ -1,18 +1,19 @@
 "use client";
 
 import React from "react";
-import { Group as GroupType } from "../../types";
+import { Group as GroupType, LogicOperator } from "../../types";
 import { useQueryStore } from "../../store/useQueryStore";
 import { Rule } from "./Rule";
 import { Button } from "../ui/button";
-import {
-  Plus,
-  PlusCircle,
-  Trash2,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { Plus, Trash2, FolderPlus } from "lucide-react";
 import { cn } from "../../lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -25,13 +26,7 @@ interface GroupProps {
 }
 
 export function Group({ group, isRoot = false }: GroupProps) {
-  const {
-    addRule,
-    addGroup,
-    removeNode,
-    updateGroupLogic,
-    toggleGroupCollapse,
-  } = useQueryStore();
+  const { addRule, addGroup, removeNode, updateGroupLogic } = useQueryStore();
 
   const handleAddRule = () => {
     addRule(group.id, {
@@ -46,83 +41,67 @@ export function Group({ group, isRoot = false }: GroupProps) {
   };
 
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-4 rounded-xl border p-4 bg-background/50",
-        isRoot ? "shadow-sm" : "ml-4 border-l-4 border-l-primary/20"
-      )}
-    >
-      {/* Group Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => toggleGroupCollapse(group.id)}
-          >
-            {group.isCollapsed ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <ChevronDown className="h-4 w-4" />
-            )}
-          </Button>
-
-          <div className="flex items-center rounded-md border p-0.5 bg-muted/50">
-            <Button
-              variant={group.logic === "AND" ? "default" : "ghost"}
-              size="sm"
-              className="h-7 px-3 text-xs"
-              onClick={() => updateGroupLogic(group.id, "AND")}
+    <div className={cn("relative flex flex-col w-full", !isRoot && "mt-2")}>
+      <div
+        className={cn(
+          "relative flex flex-col gap-3",
+          isRoot ? "" : "pl-6 border-l-[1.5px] border-primary/30 ml-4 py-2"
+        )}
+      >
+        {/* Logic Badge (Hanging on the line) */}
+        {!isRoot && (
+          <div className="absolute -left-[20px] top-6 z-10 bg-white dark:bg-zinc-950 rounded-full shadow-sm border border-zinc-200 dark:border-zinc-800 flex items-center">
+            <Select
+              value={group.logic}
+              onValueChange={(val) => {
+                if (val) updateGroupLogic(group.id, val as LogicOperator);
+              }}
             >
-              AND
-            </Button>
-            <Button
-              variant={group.logic === "OR" ? "default" : "ghost"}
-              size="sm"
-              className="h-7 px-3 text-xs"
-              onClick={() => updateGroupLogic(group.id, "OR")}
-            >
-              OR
-            </Button>
+              <SelectTrigger className="h-8 border-0 shadow-none focus:ring-0 text-xs font-semibold text-primary px-3 rounded-full hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="AND" className="text-xs font-medium">
+                  And
+                </SelectItem>
+                <SelectItem value="OR" className="text-xs font-medium">
+                  Or
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </div>
+        )}
 
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleAddRule}
-            className="h-8"
-          >
-            <Plus className="mr-2 h-3 w-3" /> Rule
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleAddGroup}
-            className="h-8"
-          >
-            <PlusCircle className="mr-2 h-3 w-3" /> Group
-          </Button>
-          {!isRoot && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => removeNode(group.id)}
-              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+        {isRoot && (
+          <div className="flex items-center gap-2 mb-2">
+            <Select
+              value={group.logic}
+              onValueChange={(val) => {
+                if (val) updateGroupLogic(group.id, val as LogicOperator);
+              }}
             >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      </div>
+              <SelectTrigger className="w-[80px] h-9 text-sm font-semibold text-primary bg-primary/5 border-primary/20 hover:bg-primary/10 transition-colors">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="AND" className="font-medium">
+                  And
+                </SelectItem>
+                <SelectItem value="OR" className="font-medium">
+                  Or
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <span className="text-sm text-muted-foreground font-medium">
+              matching rules
+            </span>
+          </div>
+        )}
 
-      {/* Group Children */}
-      {!group.isCollapsed && (
-        <div className="flex flex-col gap-3 pl-6 border-l-2 border-transparent">
+        {/* Group Children */}
+        <div className="flex flex-col gap-3">
           {group.children.length === 0 ? (
-            <div className="text-sm text-muted-foreground italic py-2 pl-4 border-l-2 border-dashed">
+            <div className="text-sm text-muted-foreground italic py-3 pl-4 border border-dashed rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50">
               Empty group. Add a rule or nested group.
             </div>
           ) : (
@@ -142,7 +121,40 @@ export function Group({ group, isRoot = false }: GroupProps) {
             </SortableContext>
           )}
         </div>
-      )}
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleAddRule}
+              className="text-primary hover:text-primary hover:bg-primary/10 h-8 font-medium"
+            >
+              <Plus className="mr-1.5 h-4 w-4" /> Add condition
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleAddGroup}
+              className="text-primary hover:text-primary hover:bg-primary/10 h-8 font-medium"
+            >
+              <FolderPlus className="mr-1.5 h-4 w-4" /> Add group
+            </Button>
+          </div>
+
+          {!isRoot && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => removeNode(group.id)}
+              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

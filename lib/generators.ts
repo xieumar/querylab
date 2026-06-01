@@ -1,6 +1,6 @@
 import { QueryNode } from "../types";
 
-const formatSqlValue = (value: any, operator: string) => {
+const formatSqlValue = (value: unknown, operator: string) => {
   if (typeof value === "string") {
     if (operator === "contains") return `'%${value}%'`;
     if (operator === "starts_with") return `'${value}%'`;
@@ -79,8 +79,9 @@ const mapMongoOperator = (operator: string) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const generateMongo = (node: QueryNode): Record<string, any> | null => {
+export const generateMongo = (
+  node: QueryNode
+): Record<string, unknown> | null => {
   if (node.type === "rule") {
     if (!node.field || node.value === undefined || node.value === "")
       return null;

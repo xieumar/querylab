@@ -4,6 +4,7 @@ import { useQueryStore } from "../../store/useQueryStore";
 import { Group } from "../query-builder/Group";
 import { LivePreview } from "../query-builder/LivePreview";
 import { ResultsInspector } from "../query-builder/ResultsInspector";
+import { Sidebar } from "../query-builder/Sidebar";
 import { ThemeToggle } from "../ThemeToggle";
 import { useKeyboardShortcuts } from "../../hooks/useKeyboardShortcuts";
 import {
@@ -19,7 +20,7 @@ import {
 
 import { useRef } from "react";
 import { Button } from "../ui/button";
-import { Download, Upload } from "lucide-react";
+import { Download, Upload, Play } from "lucide-react";
 import { parseQueryTree } from "../../lib/schema";
 
 const restrictToVerticalAxis: Modifier = ({ transform }) => {
@@ -30,7 +31,7 @@ const restrictToVerticalAxis: Modifier = ({ transform }) => {
 };
 
 export function QueryBuilderPage() {
-  const { tree, reorderNode, importQuery } = useQueryStore();
+  const { tree, reorderNode, importQuery, pushHistory } = useQueryStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   useKeyboardShortcuts();
 
@@ -117,26 +118,44 @@ export function QueryBuilderPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column: Builder */}
-          <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-medium text-foreground">Builder</h2>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-              modifiers={[restrictToVerticalAxis]}
-            >
-              <Group group={tree} isRoot />
-            </DndContext>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Sidebar (Saved Queries & History) */}
+          <div className="lg:col-span-3">
+            <Sidebar />
           </div>
 
-          {/* Right Column: Live Preview */}
-          <div className="flex flex-col gap-4">
-            <h2 className="text-lg font-medium text-foreground">
-              Live Syntax Preview
-            </h2>
-            <LivePreview />
+          {/* Builder and Preview */}
+          <div className="lg:col-span-9 grid grid-cols-1 xl:grid-cols-2 gap-8">
+            {/* Left Column: Builder */}
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-medium text-foreground">Builder</h2>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+                modifiers={[restrictToVerticalAxis]}
+              >
+                <div className="flex flex-col gap-4">
+                  <Group group={tree} isRoot />
+                  <div className="flex justify-end mt-2">
+                    <Button
+                      onClick={() => pushHistory()}
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+                    >
+                      <Play className="w-4 h-4 mr-2 fill-current" /> Run Query
+                    </Button>
+                  </div>
+                </div>
+              </DndContext>
+            </div>
+
+            {/* Right Column: Live Preview */}
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-medium text-foreground">
+                Live Syntax Preview
+              </h2>
+              <LivePreview />
+            </div>
           </div>
         </div>
 

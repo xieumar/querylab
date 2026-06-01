@@ -1,9 +1,12 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
+import { persist } from "zustand/middleware";
 import { QueryTree, Rule, Group, LogicOperator, QueryNode } from "../types";
 
 interface QueryState {
   tree: QueryTree;
+  savedQueries: Record<string, QueryTree>;
+  history: { id: string; timestamp: number; tree: QueryTree }[];
   addRule: (groupId: string, rule: Omit<Rule, "id" | "type">) => void;
   updateRule: (
     ruleId: string,
@@ -15,6 +18,10 @@ interface QueryState {
   toggleGroupCollapse: (groupId: string) => void;
   reorderNode: (activeId: string, overId: string) => void;
   importQuery: (tree: QueryTree) => void;
+  saveQuery: (name: string) => void;
+  deleteSavedQuery: (name: string) => void;
+  pushHistory: () => void;
+  clearHistory: () => void;
 }
 
 const initialTree: QueryTree = {
@@ -25,10 +32,41 @@ const initialTree: QueryTree = {
 };
 
 export const useQueryStore = create<QueryState>()(
-  temporal((set) => ({
-    tree: initialTree,
+  temporal(
+    persist(
+      (set, get) => ({
+        tree: initialTree,
+        savedQueries: {},
+        history: [],
 
-    importQuery: (tree) => set({ tree }),
+        importQuery: (tree) => set({ tree }),
+
+        saveQuery: (name) =>
+          set((state) => ({
+            savedQueries: { ...state.savedQueries, [name]: state.tree },
+          })),
+
+        deleteSavedQuery: (name) =>
+          set((state) => {
+            const newSaved = { ...state.savedQueries };
+            delete newSaved[name];
+            return { savedQueries: newSaved };
+          }),
+
+        pushHistory: () =>
+          set((state) => {
+            const newHistory = [
+              {
+                id: crypto.randomUUID(),
+                timestamp: Date.now(),
+                tree: state.tree,
+              },
+              ...state.history,
+            ].slice(0, 10); // keep last 10
+            return { history: newHistory };
+          }),
+
+        clearHistory: () => set({ history: [] }),
 
     addRule: (groupId, rule) =>
       set((state) => {
@@ -197,5 +235,14 @@ export const useQueryStore = create<QueryState>()(
 
         return { tree: newTree };
       }),
-  }))
+  }),
+  {
+    name: "query-builder-storage",
+    partialize: (state) => ({
+      savedQueries: state.savedQueries,
+      history: state.history,
+    }),
+  }
+)
+  )
 );

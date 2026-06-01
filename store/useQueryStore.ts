@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { temporal } from "zundo";
-import { QueryTree, Rule, Group, LogicOperator } from "../types";
+import { QueryTree, Rule, Group, LogicOperator, QueryNode } from "../types";
 
 interface QueryState {
   tree: QueryTree;
@@ -171,10 +171,10 @@ export const useQueryStore = create<QueryState>()(
         // Same group reorder
         if (aParent.id === oParent.id) {
           const oldIndex = aParent.children.findIndex(
-            (c: any) => c.id === activeId
+            (c: QueryNode) => c.id === activeId
           );
           const newIndex = aParent.children.findIndex(
-            (c: any) => c.id === overId
+            (c: QueryNode) => c.id === overId
           );
 
           const [movedNode] = aParent.children.splice(oldIndex, 1);
@@ -182,10 +182,10 @@ export const useQueryStore = create<QueryState>()(
         } else {
           // Cross-group move
           const oldIndex = aParent.children.findIndex(
-            (c: any) => c.id === activeId
+            (c: QueryNode) => c.id === activeId
           );
           const newIndex = oParent.children.findIndex(
-            (c: any) => c.id === overId
+            (c: QueryNode) => c.id === overId
           );
 
           const [movedNode] = aParent.children.splice(oldIndex, 1);

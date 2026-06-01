@@ -84,7 +84,7 @@ export function Rule({ rule }: RuleProps) {
             if (val !== null) updateRule(rule.id, { value: val });
           }}
         >
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full sm:w-[200px] h-9 bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20 transition-colors">
             <SelectValue placeholder="Select a value" />
           </SelectTrigger>
           <SelectContent>
@@ -104,7 +104,7 @@ export function Rule({ rule }: RuleProps) {
           type="date"
           value={String(rule.value)}
           onChange={handleValueChange}
-          className="w-[200px]"
+          className="w-full sm:w-[200px] h-9 bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20 transition-colors"
         />
       );
     }
@@ -115,20 +115,24 @@ export function Rule({ rule }: RuleProps) {
         value={rule.value}
         onChange={handleValueChange}
         placeholder="Value"
-        className="w-[200px]"
+        className="w-full sm:w-[200px] h-9 bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20 transition-colors"
       />
     );
   };
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-card rounded-lg border shadow-sm">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-2.5 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm transition-all hover:shadow-md hover:border-primary/30 group">
       <Select value={rule.field} onValueChange={handleFieldChange}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full sm:w-[180px] h-9 bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20 transition-colors">
           <SelectValue placeholder="Select field" />
         </SelectTrigger>
         <SelectContent>
           {schema.map((field) => (
-            <SelectItem key={field.name} value={field.name}>
+            <SelectItem
+              key={field.name}
+              value={field.name}
+              className="cursor-pointer"
+            >
               {field.name}
             </SelectItem>
           ))}
@@ -136,25 +140,25 @@ export function Rule({ rule }: RuleProps) {
       </Select>
 
       <Select value={rule.operator} onValueChange={handleOperatorChange}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full sm:w-[180px] h-9 bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20 transition-colors">
           <SelectValue placeholder="Select operator" />
         </SelectTrigger>
         <SelectContent>
           {validOperators.map((op) => (
-            <SelectItem key={op} value={op}>
+            <SelectItem key={op} value={op} className="cursor-pointer">
               {formatOperator(op)}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
 
-      {renderValueInput()}
+      <div className="flex-1 w-full sm:w-auto">{renderValueInput()}</div>
 
       <Button
         variant="ghost"
         size="icon"
         onClick={() => removeNode(rule.id)}
-        className="ml-auto text-muted-foreground hover:text-destructive"
+        className="ml-auto h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
         aria-label="Remove rule"
       >
         <Trash2 className="h-4 w-4" />

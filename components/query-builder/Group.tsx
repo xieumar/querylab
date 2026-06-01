@@ -5,7 +5,13 @@ import { Group as GroupType } from "../../types";
 import { useQueryStore } from "../../store/useQueryStore";
 import { Rule } from "./Rule";
 import { Button } from "../ui/button";
-import { Plus, PlusCircle, Trash2, ChevronDown, ChevronRight } from "lucide-react";
+import {
+  Plus,
+  PlusCircle,
+  Trash2,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 import { cn } from "../../lib/utils";
 
 interface GroupProps {
@@ -14,7 +20,13 @@ interface GroupProps {
 }
 
 export function Group({ group, isRoot = false }: GroupProps) {
-  const { addRule, addGroup, removeNode, updateGroupLogic, toggleGroupCollapse } = useQueryStore();
+  const {
+    addRule,
+    addGroup,
+    removeNode,
+    updateGroupLogic,
+    toggleGroupCollapse,
+  } = useQueryStore();
 
   const handleAddRule = () => {
     addRule(group.id, {
@@ -47,7 +59,7 @@ export function Group({ group, isRoot = false }: GroupProps) {
             {group.isCollapsed ? (
               <ChevronRight className="h-4 w-4" />
             ) : (
-               <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4" />
             )}
           </Button>
 
@@ -72,10 +84,20 @@ export function Group({ group, isRoot = false }: GroupProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleAddRule} className="h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleAddRule}
+            className="h-8"
+          >
             <Plus className="mr-2 h-3 w-3" /> Rule
           </Button>
-          <Button variant="outline" size="sm" onClick={handleAddGroup} className="h-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleAddGroup}
+            className="h-8"
+          >
             <PlusCircle className="mr-2 h-3 w-3" /> Group
           </Button>
           {!isRoot && (

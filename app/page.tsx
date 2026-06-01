@@ -10,8 +10,13 @@ export default function Home() {
     <div className="flex flex-col flex-1 items-center bg-zinc-50 font-sans min-h-screen p-8 dark:bg-black">
       <main className="w-full max-w-4xl flex flex-col gap-8 bg-white dark:bg-zinc-950 p-8 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold tracking-tight">QueryBuilder Sandbox</h1>
-          <p className="text-muted-foreground">This is a temporary playground to test Phase 3: Recursive Group Rendering.</p>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            QueryBuilder Sandbox
+          </h1>
+          <p className="text-muted-foreground">
+            This is a temporary playground to test Phase 3: Recursive Group
+            Rendering.
+          </p>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -29,4 +34,3 @@ export default function Home() {
     </div>
   );
 }
-

@@ -45,12 +45,12 @@ export function Group({ group, isRoot = false }: GroupProps) {
       <div
         className={cn(
           "relative flex flex-col gap-3",
-          isRoot ? "" : "pl-6 border-l-[1.5px] border-primary/30 ml-4 py-2"
+          isRoot ? "" : "pl-12 border-l-[1.5px] border-primary/30 ml-4 py-2"
         )}
       >
         {/* Logic Badge (Hanging on the line) */}
         {!isRoot && (
-          <div className="absolute -left-[20px] top-6 z-10 bg-white dark:bg-zinc-950 rounded-full shadow-sm border border-zinc-200 dark:border-zinc-800 flex items-center">
+          <div className="absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-zinc-950 rounded-full shadow-sm border border-zinc-200 dark:border-zinc-800 flex items-center">
             <Select
               value={group.logic}
               onValueChange={(val) => {
@@ -124,22 +124,22 @@ export function Group({ group, isRoot = false }: GroupProps) {
 
         {/* Action Buttons */}
         <div className="flex items-center justify-between mt-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={handleAddRule}
-              className="text-primary hover:text-primary hover:bg-primary/10 h-8 font-medium"
+              className="text-primary hover:text-primary hover:bg-primary/5 border-primary/20 h-9 font-medium"
             >
-              <Plus className="mr-1.5 h-4 w-4" /> Add condition
+              <Plus className="mr-1.5 h-4 w-4" /> Add rule
             </Button>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={handleAddGroup}
-              className="text-primary hover:text-primary hover:bg-primary/10 h-8 font-medium"
+              className="text-primary hover:text-primary hover:bg-primary/5 border-primary/20 h-9 font-medium"
             >
-              <FolderPlus className="mr-1.5 h-4 w-4" /> Add group
+              <FolderPlus className="mr-1.5 h-4 w-4" /> Add inner group
             </Button>
           </div>
 

@@ -158,7 +158,7 @@ export function Rule({ rule }: RuleProps) {
         variant="ghost"
         size="icon"
         onClick={() => removeNode(rule.id)}
-        className="ml-auto h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="ml-auto h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
         aria-label="Remove rule"
       >
         <Trash2 className="h-4 w-4" />

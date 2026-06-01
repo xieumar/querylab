@@ -3,6 +3,7 @@
 import { useQueryStore } from "../store/useQueryStore";
 import { Group } from "../components/query-builder/Group";
 import { LivePreview } from "../components/query-builder/LivePreview";
+import { ResultsInspector } from "../components/query-builder/ResultsInspector";
 
 export default function Home() {
   const { tree } = useQueryStore();
@@ -37,6 +38,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <ResultsInspector />
       </main>
     </div>
   );

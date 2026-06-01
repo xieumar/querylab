@@ -5,14 +5,8 @@ import { Input } from "../ui/input";
 import { Trash2, Save, History, Bookmark, Play } from "lucide-react";
 
 export function Sidebar() {
-  const {
-    tree,
-    savedQueries,
-    history,
-    saveQuery,
-    deleteSavedQuery,
-    importQuery,
-  } = useQueryStore();
+  const { savedQueries, history, saveQuery, deleteSavedQuery, importQuery } =
+    useQueryStore();
   const [saveName, setSaveName] = useState("");
 
   const handleSave = () => {
@@ -89,7 +83,7 @@ export function Sidebar() {
               No recent history.
             </p>
           ) : (
-            history.map((entry, idx) => {
+            history.map((entry) => {
               const date = new Date(entry.timestamp);
               const timeString = `${date.getHours()}:${String(
                 date.getMinutes()

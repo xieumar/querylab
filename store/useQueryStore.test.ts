@@ -11,6 +11,8 @@ describe("useQueryStore", () => {
         logic: "AND",
         children: [],
       },
+      savedQueries: {},
+      history: [],
     });
   });
 
@@ -128,5 +130,33 @@ describe("useQueryStore", () => {
     if (group.type === "group") {
       expect(group.logic).toBe("AND");
     }
+  });
+
+  it("should handle pushing to history and maintaining limits", () => {
+    // Push 15 items
+    for (let i = 0; i < 15; i++) {
+      useQueryStore.getState().pushHistory();
+    }
+
+    const newState = useQueryStore.getState();
+    // Should cap at 10 items
+    expect(newState.history).toHaveLength(10);
+    // The timestamp should exist
+    expect(newState.history[0].timestamp).toBeDefined();
+  });
+
+  it("should handle saving and deleting queries", () => {
+    const store = useQueryStore.getState();
+
+    store.saveQuery("My Custom Query");
+    let newState = useQueryStore.getState();
+
+    expect(newState.savedQueries["My Custom Query"]).toBeDefined();
+    expect(newState.savedQueries["My Custom Query"].id).toBe("root");
+
+    newState.deleteSavedQuery("My Custom Query");
+    newState = useQueryStore.getState();
+
+    expect(newState.savedQueries["My Custom Query"]).toBeUndefined();
   });
 });

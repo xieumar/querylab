@@ -8,7 +8,7 @@ import { Database, SearchX, Clock } from "lucide-react";
 
 export function ResultsInspector() {
   const { tree } = useQueryStore();
-  
+
   const { results, executionTimeMs } = useMemo(() => {
     return executeQuery(tree, mockUsers);
   }, [tree]);
@@ -35,7 +35,9 @@ export function ResultsInspector() {
           {results.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12 text-muted-foreground">
               <SearchX className="h-10 w-10 mb-4 opacity-50" />
-              <p className="text-lg font-medium text-zinc-900 dark:text-zinc-100">No results found</p>
+              <p className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+                No results found
+              </p>
               <p className="text-sm">Try adjusting your query conditions.</p>
             </div>
           ) : (
@@ -52,11 +54,18 @@ export function ResultsInspector() {
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 {results.map((row) => (
-                  <tr key={row.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
+                  <tr
+                    key={row.id}
+                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors"
+                  >
                     <td className="px-6 py-4 font-mono text-xs">{row.id}</td>
-                    <td className="px-6 py-4 font-medium">{row.firstName} {row.lastName}</td>
+                    <td className="px-6 py-4 font-medium">
+                      {row.firstName} {row.lastName}
+                    </td>
                     <td className="px-6 py-4">{row.age}</td>
-                    <td className="px-6 py-4 text-muted-foreground">{row.email}</td>
+                    <td className="px-6 py-4 text-muted-foreground">
+                      {row.email}
+                    </td>
                     <td className="px-6 py-4">
                       <span className="capitalize">{row.role}</span>
                     </td>
@@ -66,8 +75,8 @@ export function ResultsInspector() {
                           row.status === "active"
                             ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
                             : row.status === "inactive"
-                            ? "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
-                            : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                              ? "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
+                              : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
                         }`}
                       >
                         {row.status}

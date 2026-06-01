@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { temporal } from "zundo";
 import { QueryTree, Rule, Group, LogicOperator } from "../types";
 
 interface QueryState {
@@ -21,8 +22,10 @@ const initialTree: QueryTree = {
   children: [],
 };
 
-export const useQueryStore = create<QueryState>((set) => ({
-  tree: initialTree,
+export const useQueryStore = create<QueryState>()(
+  temporal(
+    (set) => ({
+      tree: initialTree,
 
   addRule: (groupId, rule) =>
     set((state) => {
@@ -138,4 +141,5 @@ export const useQueryStore = create<QueryState>((set) => ({
 
       return { tree: recursivelyToggle(state.tree) };
     }),
-}));
+  })
+));

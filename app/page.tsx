@@ -4,21 +4,27 @@ import { useQueryStore } from "../store/useQueryStore";
 import { Group } from "../components/query-builder/Group";
 import { LivePreview } from "../components/query-builder/LivePreview";
 import { ResultsInspector } from "../components/query-builder/ResultsInspector";
+import { ThemeToggle } from "../components/ThemeToggle";
+import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 
 export default function Home() {
   const { tree } = useQueryStore();
+  useKeyboardShortcuts();
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black font-sans p-4 md:p-8">
       <main className="w-full max-w-7xl mx-auto flex flex-col gap-8 bg-white dark:bg-zinc-950 p-6 md:p-8 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
-        <div className="flex flex-col gap-2 border-b pb-6 dark:border-zinc-800">
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Visual Query Builder
-          </h1>
-          <p className="text-muted-foreground">
-            Construct complex queries visually and preview the syntax in
-            real-time.
-          </p>
+        <div className="flex items-start justify-between border-b pb-6 dark:border-zinc-800">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-semibold tracking-tight">
+              Visual Query Builder
+            </h1>
+            <p className="text-muted-foreground">
+              Construct complex queries visually and preview the syntax in
+              real-time.
+            </p>
+          </div>
+          <ThemeToggle />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

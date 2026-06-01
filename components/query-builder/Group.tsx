@@ -13,6 +13,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableItem } from "./SortableItem";
 
 interface GroupProps {
   group: GroupType;
@@ -115,21 +120,26 @@ export function Group({ group, isRoot = false }: GroupProps) {
 
       {/* Group Children */}
       {!group.isCollapsed && (
-        <div className="flex flex-col gap-3 pl-2">
+        <div className="flex flex-col gap-3 pl-6 border-l-2 border-transparent">
           {group.children.length === 0 ? (
             <div className="text-sm text-muted-foreground italic py-2 pl-4 border-l-2 border-dashed">
               Empty group. Add a rule or nested group.
             </div>
           ) : (
-            group.children.map((node) => {
-              if (node.type === "rule") {
-                return <Rule key={node.id} rule={node} />;
-              }
-              if (node.type === "group") {
-                return <Group key={node.id} group={node} />;
-              }
-              return null;
-            })
+            <SortableContext
+              items={group.children.map((c) => c.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {group.children.map((node) => (
+                <SortableItem key={node.id} id={node.id}>
+                  {node.type === "rule" ? (
+                    <Rule rule={node} />
+                  ) : (
+                    <Group group={node} />
+                  )}
+                </SortableItem>
+              ))}
+            </SortableContext>
           )}
         </div>
       )}

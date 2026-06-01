@@ -14,6 +14,7 @@ interface QueryState {
   updateGroupLogic: (groupId: string, logic: LogicOperator) => void;
   toggleGroupCollapse: (groupId: string) => void;
   reorderNode: (activeId: string, overId: string) => void;
+  importQuery: (tree: QueryTree) => void;
 }
 
 const initialTree: QueryTree = {
@@ -26,6 +27,8 @@ const initialTree: QueryTree = {
 export const useQueryStore = create<QueryState>()(
   temporal((set) => ({
     tree: initialTree,
+
+    importQuery: (tree) => set({ tree }),
 
     addRule: (groupId, rule) =>
       set((state) => {

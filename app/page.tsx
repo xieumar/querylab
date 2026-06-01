@@ -6,10 +6,39 @@ import { LivePreview } from "../components/query-builder/LivePreview";
 import { ResultsInspector } from "../components/query-builder/ResultsInspector";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+  Modifier,
+} from "@dnd-kit/core";
+
+const restrictToVerticalAxis: Modifier = ({ transform }) => {
+  return {
+    ...transform,
+    x: 0,
+  };
+};
 
 export default function Home() {
-  const { tree } = useQueryStore();
+  const { tree, reorderNode } = useQueryStore();
   useKeyboardShortcuts();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor)
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      reorderNode(active.id as string, over.id as string);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black font-sans p-4 md:p-8">
@@ -31,7 +60,14 @@ export default function Home() {
           {/* Left Column: Builder */}
           <div className="flex flex-col gap-4">
             <h2 className="text-lg font-medium text-foreground">Builder</h2>
-            <Group group={tree} isRoot />
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis]}
+            >
+              <Group group={tree} isRoot />
+            </DndContext>
           </div>
 
           {/* Right Column: Live Preview */}

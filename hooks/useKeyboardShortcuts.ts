@@ -15,7 +15,7 @@ export function useKeyboardShortcuts() {
           temporal.undo();
         }
       }
-      
+
       // Redo: Ctrl+Shift+Z or Cmd+Shift+Z
       if ((e.ctrlKey || e.metaKey) && e.key === "z" && e.shiftKey) {
         e.preventDefault();

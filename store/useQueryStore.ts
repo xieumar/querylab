@@ -11,6 +11,7 @@ interface QueryState {
   removeNode: (nodeId: string) => void;
   addGroup: (parentId: string, logic: LogicOperator) => void;
   updateGroupLogic: (groupId: string, logic: LogicOperator) => void;
+  toggleGroupCollapse: (groupId: string) => void;
 }
 
 const initialTree: QueryTree = {
@@ -119,5 +120,22 @@ export const useQueryStore = create<QueryState>((set) => ({
       };
 
       return { tree: recursivelyUpdate(state.tree) };
+    }),
+
+  toggleGroupCollapse: (groupId) =>
+    set((state) => {
+      const recursivelyToggle = (node: Group): Group => {
+        if (node.id === groupId) {
+          return { ...node, isCollapsed: !node.isCollapsed };
+        }
+        return {
+          ...node,
+          children: node.children.map((child) =>
+            child.type === "group" ? recursivelyToggle(child) : child
+          ),
+        };
+      };
+
+      return { tree: recursivelyToggle(state.tree) };
     }),
 }));

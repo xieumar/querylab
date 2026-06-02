@@ -18,10 +18,11 @@ import {
   Modifier,
 } from "@dnd-kit/core";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { Download, Upload, Play } from "lucide-react";
+import { Download, Upload, Database, X } from "lucide-react";
 import { parseQueryTree } from "../../lib/schema";
+import Link from "next/link";
 
 const restrictToVerticalAxis: Modifier = ({ transform }) => {
   return {
@@ -33,6 +34,7 @@ const restrictToVerticalAxis: Modifier = ({ transform }) => {
 export function QueryBuilderPage() {
   const { tree, reorderNode, importQuery, pushHistory } = useQueryStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isResultsOpen, setIsResultsOpen] = useState(false);
   useKeyboardShortcuts();
 
   const sensors = useSensors(
@@ -84,17 +86,26 @@ export function QueryBuilderPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black font-sans p-4 md:p-8">
-      <main className="w-full mx-auto flex flex-col gap-8 bg-white dark:bg-zinc-950 p-6 md:p-8 rounded-2xl shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between border-b pb-6 dark:border-zinc-800 gap-4">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-semibold tracking-tight">
-              Visual Query Builder
-            </h1>
-            <p className="text-muted-foreground">
-              Construct complex queries visually and preview the syntax in
-              real-time.
-            </p>
+    <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950 font-sans p-4 md:p-8">
+      <main className="w-full mx-auto flex flex-col gap-8">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between pb-6 gap-4">
+          <div className="flex flex-col gap-4">
+            <Link
+              href="/"
+              className="flex items-center gap-2 transition-opacity hover:opacity-80 w-fit"
+            >
+              <Database className="h-6 w-6 text-primary" />
+              <span className="text-xl font-bold tracking-tight">QueryLab</span>
+            </Link>
+            <div className="flex flex-col gap-2">
+              <h1 className="text-3xl font-semibold tracking-tight">
+                Visual Query Builder
+              </h1>
+              <p className="text-muted-foreground">
+                Construct complex queries visually and preview the syntax in
+                real-time.
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <input
@@ -127,7 +138,7 @@ export function QueryBuilderPage() {
           {/* Builder and Preview */}
           <div className="lg:col-span-9 grid grid-cols-1 xl:grid-cols-2 gap-8">
             {/* Left Column: Builder */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 min-w-0">
               <h2 className="text-lg font-medium text-foreground">Builder</h2>
               <DndContext
                 sensors={sensors}
@@ -136,30 +147,49 @@ export function QueryBuilderPage() {
                 modifiers={[restrictToVerticalAxis]}
               >
                 <div className="flex flex-col gap-4">
-                  <Group group={tree} isRoot />
-                  <div className="flex justify-end mt-2">
-                    <Button
-                      onClick={() => pushHistory()}
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
-                    >
-                      <Play className="w-4 h-4 mr-2 fill-current" /> Run Query
-                    </Button>
-                  </div>
+                  <Group
+                    group={tree}
+                    isRoot
+                    onRunQuery={() => {
+                      pushHistory();
+                      setIsResultsOpen(true);
+                    }}
+                  />
                 </div>
               </DndContext>
             </div>
 
             {/* Right Column: Live Preview */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 min-w-0">
               <h2 className="text-lg font-medium text-foreground">
                 Live Syntax Preview
               </h2>
               <LivePreview />
             </div>
+
+            {/* Results Panel */}
+            {isResultsOpen && (
+              <div className="fixed inset-x-0 bottom-0 z-50 h-[40vh] bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 shadow-[0_-12px_40px_rgb(0,0,0,0.12)] flex flex-col rounded-t-2xl overflow-hidden">
+                {/* Header */}
+                <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-200 dark:border-zinc-800 shrink-0 bg-zinc-50 dark:bg-zinc-900">
+                  <span className="font-semibold text-sm">Query Results</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 rounded-full"
+                    onClick={() => setIsResultsOpen(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-4 lg:px-8 pb-8">
+                  <ResultsInspector />
+                </div>
+              </div>
+            )}
           </div>
         </div>
-
-        <ResultsInspector />
       </main>
     </div>
   );

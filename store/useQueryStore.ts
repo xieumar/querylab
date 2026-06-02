@@ -20,6 +20,7 @@ interface QueryState {
   importQuery: (tree: QueryTree) => void;
   saveQuery: (name: string) => void;
   deleteSavedQuery: (name: string) => void;
+  clearSavedQueries: () => void;
   pushHistory: () => void;
   clearHistory: () => void;
 }
@@ -41,10 +42,16 @@ export const useQueryStore = create<QueryState>()(
 
         importQuery: (tree) => set({ tree }),
 
-        saveQuery: (name) =>
-          set((state) => ({
-            savedQueries: { ...state.savedQueries, [name]: state.tree },
-          })),
+        saveQuery: (name) => {
+          set((state) => {
+            if (state.savedQueries[name]) {
+              throw new Error(`A query named "${name}" already exists.`);
+            }
+            return {
+              savedQueries: { ...state.savedQueries, [name]: state.tree },
+            };
+          });
+        },
 
         deleteSavedQuery: (name) =>
           set((state) => {
@@ -52,6 +59,8 @@ export const useQueryStore = create<QueryState>()(
             delete newSaved[name];
             return { savedQueries: newSaved };
           }),
+
+        clearSavedQueries: () => set({ savedQueries: {} }),
 
         pushHistory: () =>
           set((state) => {

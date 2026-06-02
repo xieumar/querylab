@@ -4,32 +4,17 @@ import React, { useMemo } from "react";
 import { useQueryStore } from "../../store/useQueryStore";
 import { executeQuery } from "../../lib/engine";
 import { mockUsers } from "../../lib/mockData";
-import { Database, SearchX, Clock } from "lucide-react";
+import { SearchX } from "lucide-react";
 
 export function ResultsInspector() {
   const { tree } = useQueryStore();
 
-  const { results, executionTimeMs } = useMemo(() => {
+  const { results } = useMemo(() => {
     return executeQuery(tree, mockUsers);
   }, [tree]);
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full mt-4 border-t border-zinc-200 dark:border-zinc-800 pt-8">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-foreground">
-          <Database className="h-5 w-5 text-indigo-500" />
-          <h2 className="text-xl font-medium">Simulated Query Results</h2>
-        </div>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Clock className="h-4 w-4" /> {executionTimeMs}ms
-          </span>
-          <span className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-xs font-semibold">
-            {results.length} rows
-          </span>
-        </div>
-      </div>
-
+    <div className="flex flex-col gap-4 w-full border-zinc-200 dark:border-zinc-800 pt-8">
       <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-950 shadow-sm">
         <div className="overflow-x-auto">
           {results.length === 0 ? (

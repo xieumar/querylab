@@ -7,7 +7,7 @@ import { useSchemaStore } from "@/store/useSchemaStore";
 import { mockUsersSchema, mockProductsSchema } from "@/lib/mockSchemas";
 import { useRouter } from "next/navigation";
 import { Database, Filter, Layers } from "lucide-react";
-import { QueryTree, FieldSchema } from "@/types";
+import { QueryTree, FieldSchema, QueryNode } from "@/types";
 
 type Template = {
   id: string;
@@ -189,7 +189,7 @@ const TEMPLATES: Template[] = [
   },
 ];
 
-function QueryPreview({ node }: { node: any }) {
+function QueryPreview({ node }: { node: QueryNode }) {
   if (node.type === "rule") {
     const displayValue = String(node.value);
     const opDisplay = node.operator.replace(/_/g, " ");
@@ -214,7 +214,7 @@ function QueryPreview({ node }: { node: any }) {
   if (node.type === "group") {
     return (
       <div className="flex flex-wrap items-center gap-y-2 gap-x-1.5">
-        {node.children.map((child: any, i: number) => (
+        {node.children.map((child: QueryNode, i: number) => (
           <React.Fragment key={child.id}>
             {child.type === "group" && (
               <span className="text-zinc-400 dark:text-zinc-500 text-lg leading-none">

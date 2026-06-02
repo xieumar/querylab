@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Sparkles } from "lucide-react";
 import { ShaderGridBackground } from "./ShaderGridBackground";
+import { motion } from "framer-motion";
 
 export function HeroSection() {
   return (
@@ -35,24 +38,49 @@ export function HeroSection() {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto pointer-events-none">
-        <div className="inline-flex items-center rounded-lg border border-primary bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-8 shadow-sm pointer-events-auto">
+      <motion.div
+        className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, staggerChildren: 0.15 }}
+      >
+        <motion.div
+          className="inline-flex items-center rounded-lg border border-primary bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-8 shadow-sm pointer-events-auto"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           <Sparkles className="w-4 h-4 mr-2" />
           Version 1.0
-        </div>
+        </motion.div>
 
-        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight mb-6 text-zinc-950 dark:text-white leading-[1.1] pointer-events-auto">
+        <motion.h1
+          className="text-5xl md:text-7xl font-semibold tracking-tight mb-6 text-zinc-950 dark:text-white leading-[1.1] pointer-events-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+        >
           Advanced Query Building
           <br className="hidden md:block" />
           Made Simple
-        </h1>
+        </motion.h1>
 
-        <p className="text-lg md:text-xl text-zinc-500 dark:text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed pointer-events-auto">
+        <motion.p
+          className="text-lg md:text-xl text-zinc-500 dark:text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed pointer-events-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+        >
           Our visual engine helps you craft complex SQL and MongoDB queries
           effortlessly.
-        </p>
+        </motion.p>
 
-        <div className="relative z-50 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mt-4 pointer-events-auto">
+        <motion.div
+          className="relative z-50 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mt-4 pointer-events-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
+        >
           <Button
             nativeButton={false}
             render={<Link href="/docs" />}
@@ -71,8 +99,8 @@ export function HeroSection() {
           >
             Get Started
           </Button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

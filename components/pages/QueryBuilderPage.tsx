@@ -25,7 +25,7 @@ import {
 
 import { useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { Download, Upload, Database, X } from "lucide-react";
+import { Download, Upload, Database, X, LayoutTemplate } from "lucide-react";
 import { parseQueryTree } from "../../lib/schema";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -154,6 +154,14 @@ export function QueryBuilderPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Link href="/templates">
+              <Button
+                variant="outline"
+                className="h-10 bg-white dark:bg-zinc-950 shadow-sm border-zinc-200 dark:border-zinc-800 hidden sm:flex"
+              >
+                <LayoutTemplate className="w-4 h-4 mr-2" /> Templates
+              </Button>
+            </Link>
             <input
               type="file"
               accept=".json"

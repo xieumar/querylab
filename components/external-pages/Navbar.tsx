@@ -47,12 +47,9 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <div className="hidden sm:flex items-center gap-4">
-              <Link href="/login">
-                <Button variant="ghost">Login</Button>
-              </Link>
               <Link href="/builder">
-                <Button className="bg-primary text-white hover:bg-primary/90">
-                  Get Started
+                <Button className="bg-primary text-white hover:bg-primary/90 font-semibold rounded-lg px-6">
+                  Go to Dashboard
                 </Button>
               </Link>
             </div>

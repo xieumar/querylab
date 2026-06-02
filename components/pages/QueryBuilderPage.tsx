@@ -85,7 +85,7 @@ export function QueryBuilderPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black font-sans p-4 md:p-8">
-      <main className="w-full max-w-7xl mx-auto flex flex-col gap-8 bg-white dark:bg-zinc-950 p-6 md:p-8 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+      <main className="w-full mx-auto flex flex-col gap-8 bg-white dark:bg-zinc-950 p-6 md:p-8 rounded-2xl shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between border-b pb-6 dark:border-zinc-800 gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl font-semibold tracking-tight">

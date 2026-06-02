@@ -2,34 +2,22 @@
 
 import React, { useMemo } from "react";
 import { useQueryStore } from "../../store/useQueryStore";
+import { useSchemaStore } from "../../store/useSchemaStore";
+import { useDataStore } from "../../store/useDataStore";
 import { executeQuery } from "../../lib/engine";
-import { mockUsers } from "../../lib/mockData";
-import { Database, SearchX, Clock } from "lucide-react";
+import { SearchX } from "lucide-react";
 
 export function ResultsInspector() {
   const { tree } = useQueryStore();
+  const { schema } = useSchemaStore();
+  const { dataset } = useDataStore();
 
-  const { results, executionTimeMs } = useMemo(() => {
-    return executeQuery(tree, mockUsers);
-  }, [tree]);
+  const { results } = useMemo(() => {
+    return executeQuery(tree, dataset);
+  }, [tree, dataset]);
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full mt-4 border-t border-zinc-200 dark:border-zinc-800 pt-8">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-foreground">
-          <Database className="h-5 w-5 text-indigo-500" />
-          <h2 className="text-xl font-medium">Simulated Query Results</h2>
-        </div>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Clock className="h-4 w-4" /> {executionTimeMs}ms
-          </span>
-          <span className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full text-xs font-semibold">
-            {results.length} rows
-          </span>
-        </div>
-      </div>
-
+    <div className="flex flex-col gap-4 w-full border-zinc-200 dark:border-zinc-800 pt-8">
       <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden bg-white dark:bg-zinc-950 shadow-sm">
         <div className="overflow-x-auto">
           {results.length === 0 ? (
@@ -44,44 +32,55 @@ export function ResultsInspector() {
             <table className="w-full text-sm text-left">
               <thead className="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-muted-foreground">
                 <tr>
-                  <th className="px-6 py-4 font-medium">ID</th>
-                  <th className="px-6 py-4 font-medium">Name</th>
-                  <th className="px-6 py-4 font-medium">Age</th>
-                  <th className="px-6 py-4 font-medium">Email</th>
-                  <th className="px-6 py-4 font-medium">Role</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
+                  {schema.map((field) => (
+                    <th
+                      key={field.name}
+                      className="px-6 py-4 font-medium capitalize"
+                    >
+                      {field.name}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                {results.map((row) => (
+                {results.map((row, i) => (
                   <tr
-                    key={row.id}
+                    key={row.id || i}
                     className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors"
                   >
-                    <td className="px-6 py-4 font-mono text-xs">{row.id}</td>
-                    <td className="px-6 py-4 font-medium">
-                      {row.firstName} {row.lastName}
-                    </td>
-                    <td className="px-6 py-4">{row.age}</td>
-                    <td className="px-6 py-4 text-muted-foreground">
-                      {row.email}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="capitalize">{row.role}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                          row.status === "active"
-                            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-                            : row.status === "inactive"
-                              ? "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
-                              : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                        }`}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
+                    {schema.map((field) => {
+                      const value = row[field.name];
+
+                      // Special styling for status if it exists, for backward compatibility
+                      if (field.name.toLowerCase() === "status") {
+                        return (
+                          <td key={field.name} className="px-6 py-4">
+                            <span
+                              className={`px-2.5 py-1 rounded-full text-xs font-medium capitalize ${
+                                value === "active"
+                                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                                  : value === "inactive"
+                                    ? "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
+                                    : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                              }`}
+                            >
+                              {String(value)}
+                            </span>
+                          </td>
+                        );
+                      }
+
+                      return (
+                        <td
+                          key={field.name}
+                          className={`px-6 py-4 ${field.name === "id" ? "font-mono text-xs" : ""}`}
+                        >
+                          {value !== undefined && value !== null
+                            ? String(value)
+                            : "-"}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))}
               </tbody>

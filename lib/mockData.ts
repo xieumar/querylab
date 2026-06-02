@@ -220,3 +220,51 @@ export const mockUsers = [
     lastLogin: "2023-10-30",
   },
 ];
+
+export const mockProducts = [
+  {
+    id: "p1",
+    title: "Wireless Headphones",
+    price: 120.0,
+    stock: 45,
+    category: "electronics",
+    isAvailable: "true",
+    releaseDate: "2023-01-10",
+  },
+  {
+    id: "p2",
+    title: "Cotton T-Shirt",
+    price: 25.5,
+    stock: 120,
+    category: "clothing",
+    isAvailable: "true",
+    releaseDate: "2022-05-15",
+  },
+  {
+    id: "p3",
+    title: "Coffee Maker",
+    price: 85.0,
+    stock: 0,
+    category: "home",
+    isAvailable: "false",
+    releaseDate: "2021-11-20",
+  },
+  {
+    id: "p4",
+    title: "Action Figure",
+    price: 15.99,
+    stock: 200,
+    category: "toys",
+    isAvailable: "true",
+    releaseDate: "2023-08-05",
+  },
+  {
+    id: "p5",
+    title: "Programming Guide",
+    price: 45.0,
+    stock: 30,
+    category: "books",
+    isAvailable: "true",
+    releaseDate: "2020-09-01",
+  },
+];

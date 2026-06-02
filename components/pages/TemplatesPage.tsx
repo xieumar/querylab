@@ -4,10 +4,12 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useQueryStore } from "@/store/useQueryStore";
 import { useSchemaStore } from "@/store/useSchemaStore";
+import { useDataStore } from "@/store/useDataStore";
 import { mockUsersSchema, mockProductsSchema } from "@/lib/mockSchemas";
+import { mockUsers, mockProducts } from "@/lib/mockData";
 import { useRouter } from "next/navigation";
 import { Database, Filter, Layers } from "lucide-react";
-import { QueryTree, FieldSchema } from "@/types";
+import { QueryTree, FieldSchema, QueryNode } from "@/types";
 
 type Template = {
   id: string;
@@ -15,6 +17,8 @@ type Template = {
   description: string;
   icon: React.ReactNode;
   schema: FieldSchema[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dataset: any[];
   query: QueryTree;
 };
 
@@ -25,6 +29,7 @@ const TEMPLATES: Template[] = [
     description: "Finds all active administrators created in the last 30 days.",
     icon: <Database className="w-6 h-6 text-blue-500" />,
     schema: mockUsersSchema,
+    dataset: mockUsers,
     query: {
       id: "root",
       type: "group",
@@ -53,6 +58,7 @@ const TEMPLATES: Template[] = [
     description: "Filters for electronics priced over $500.",
     icon: <Filter className="w-6 h-6 text-emerald-500" />,
     schema: mockProductsSchema,
+    dataset: mockProducts,
     query: {
       id: "root",
       type: "group",
@@ -81,6 +87,7 @@ const TEMPLATES: Template[] = [
     description: "Finds users with the viewer role who are still pending.",
     icon: <Layers className="w-6 h-6 text-indigo-500" />,
     schema: mockUsersSchema,
+    dataset: mockUsers,
     query: {
       id: "root",
       type: "group",
@@ -109,6 +116,7 @@ const TEMPLATES: Template[] = [
     description: "Identifies active users who haven't logged in recently.",
     icon: <Database className="w-6 h-6 text-purple-500" />,
     schema: mockUsersSchema,
+    dataset: mockUsers,
     query: {
       id: "root",
       type: "group",
@@ -137,6 +145,7 @@ const TEMPLATES: Template[] = [
     description: "Finds products that are low in stock or out of stock.",
     icon: <Filter className="w-6 h-6 text-red-500" />,
     schema: mockProductsSchema,
+    dataset: mockProducts,
     query: {
       id: "root",
       type: "group",
@@ -165,6 +174,7 @@ const TEMPLATES: Template[] = [
     description: "Filters users with high engagement or premium roles.",
     icon: <Layers className="w-6 h-6 text-amber-500" />,
     schema: mockUsersSchema,
+    dataset: mockUsers,
     query: {
       id: "root",
       type: "group",
@@ -189,7 +199,7 @@ const TEMPLATES: Template[] = [
   },
 ];
 
-function QueryPreview({ node }: { node: any }) {
+function QueryPreview({ node }: { node: QueryNode }) {
   if (node.type === "rule") {
     const displayValue = String(node.value);
     const opDisplay = node.operator.replace(/_/g, " ");
@@ -214,7 +224,7 @@ function QueryPreview({ node }: { node: any }) {
   if (node.type === "group") {
     return (
       <div className="flex flex-wrap items-center gap-y-2 gap-x-1.5">
-        {node.children.map((child: any, i: number) => (
+        {node.children.map((child: QueryNode, i: number) => (
           <React.Fragment key={child.id}>
             {child.type === "group" && (
               <span className="text-zinc-400 dark:text-zinc-500 text-lg leading-none">
@@ -244,9 +254,11 @@ export function TemplatesPage() {
   const router = useRouter();
   const importQuery = useQueryStore((state) => state.importQuery);
   const setSchema = useSchemaStore((state) => state.setSchema);
+  const setDataset = useDataStore((state) => state.setDataset);
 
   const handleUseTemplate = (template: Template) => {
     setSchema(template.schema);
+    setDataset(template.dataset);
     importQuery(template.query);
     router.push("/builder");
   };

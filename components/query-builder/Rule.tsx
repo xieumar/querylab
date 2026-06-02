@@ -121,7 +121,7 @@ export function Rule({ rule }: RuleProps) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-2.5 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm transition-all hover:shadow-md hover:border-primary/30 group">
+    <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 p-2.5 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm transition-all hover:shadow-md hover:border-primary/30 group">
       <Select value={rule.field} onValueChange={handleFieldChange}>
         <SelectTrigger className="w-full sm:w-[180px] h-9 bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 focus:ring-primary/20 transition-colors">
           <SelectValue placeholder="Select field" />

@@ -5,7 +5,7 @@ import { Group as GroupType, LogicOperator } from "../../types";
 import { useQueryStore } from "../../store/useQueryStore";
 import { Rule } from "./Rule";
 import { Button } from "../ui/button";
-import { Plus, Trash2, FolderPlus } from "lucide-react";
+import { Plus, Trash2, FolderPlus, Play } from "lucide-react";
 import { cn } from "../../lib/utils";
 import {
   Select,
@@ -23,9 +23,10 @@ import { SortableItem } from "./SortableItem";
 interface GroupProps {
   group: GroupType;
   isRoot?: boolean;
+  onRunQuery?: () => void;
 }
 
-export function Group({ group, isRoot = false }: GroupProps) {
+export function Group({ group, isRoot = false, onRunQuery }: GroupProps) {
   const { addRule, addGroup, removeNode, updateGroupLogic } = useQueryStore();
 
   const handleAddRule = () => {
@@ -123,8 +124,8 @@ export function Group({ group, isRoot = false }: GroupProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between mt-2">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between mt-2 gap-y-2">
+          <div className="flex flex-wrap items-center gap-3">
             <Button
               variant="outline"
               size="sm"
@@ -141,6 +142,30 @@ export function Group({ group, isRoot = false }: GroupProps) {
             >
               <FolderPlus className="mr-1.5 h-4 w-4" /> Add inner group
             </Button>
+            {isRoot &&
+              onRunQuery &&
+              (() => {
+                const hasValidRules = (node: GroupType): boolean => {
+                  return node.children.some(
+                    (child) =>
+                      child.type === "rule" ||
+                      (child.type === "group" &&
+                        hasValidRules(child as GroupType))
+                  );
+                };
+                const canRunQuery = hasValidRules(group);
+
+                return (
+                  <Button
+                    size="sm"
+                    onClick={onRunQuery}
+                    disabled={!canRunQuery}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-9 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Play className="w-4 h-4 mr-2 fill-current" /> Run Query
+                  </Button>
+                );
+              })()}
           </div>
 
           {!isRoot && (

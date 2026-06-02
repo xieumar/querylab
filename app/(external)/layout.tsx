@@ -1,6 +1,6 @@
 import React from "react";
-import { Navbar } from "../../components/external-pages/Navbar";
-import { Footer } from "../../components/external-pages/Footer";
+import { Navbar } from "@/components/external-pages/Navbar";
+import { Footer } from "@/components/external-pages/Footer";
 
 export default function ExternalLayout({
   children,

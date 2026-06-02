@@ -1,10 +1,19 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function StepsSection() {
   return (
     <section className="w-full py-32 px-6 sm:px-8 lg:px-12">
       <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-5 md:mb-15">
+        <motion.div
+          className="text-center mb-5 md:mb-15"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
             Build Your Query in Minutes
           </h2>
@@ -12,12 +21,18 @@ export function StepsSection() {
             Create standout visual queries in just a few simple steps. Quick,
             easy, and robust.
           </p>
-        </div>
+        </motion.div>
 
         <div className="flex flex-col gap-24">
           {/* Step 1 */}
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
-            <div className="w-full md:w-1/2 flex justify-center">
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 overflow-hidden py-4">
+            <motion.div
+              className="w-full md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: -50, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
               <div className="w-full max-w-sm aspect-square bg-zinc-100 dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-hidden relative">
                 <Image
                   src="/schema-light.png"
@@ -32,8 +47,18 @@ export function StepsSection() {
                   className="object-contain p-6 hidden dark:block"
                 />
               </div>
-            </div>
-            <div className="w-full md:w-1/2 flex justify-center">
+            </motion.div>
+            <motion.div
+              className="w-full md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.1,
+              }}
+            >
               <div className="w-full max-w-sm flex flex-col gap-4">
                 <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center rounded-xl font-bold text-xl mb-2">
                   1
@@ -48,12 +73,18 @@ export function StepsSection() {
                   types.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Step 2 */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-24">
-            <div className="w-full md:w-1/2 flex justify-center">
+          <div className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-24 overflow-hidden py-4">
+            <motion.div
+              className="w-full md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
               <div className="w-full max-w-sm aspect-square bg-zinc-100 dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-hidden relative">
                 <Image
                   src="/nesting-light.png"
@@ -68,8 +99,18 @@ export function StepsSection() {
                   className="object-contain p-6 hidden dark:block"
                 />
               </div>
-            </div>
-            <div className="w-full md:w-1/2 flex justify-center">
+            </motion.div>
+            <motion.div
+              className="w-full md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.1,
+              }}
+            >
               <div className="w-full max-w-sm flex flex-col gap-4">
                 <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center rounded-xl font-bold text-xl mb-2">
                   2
@@ -83,12 +124,18 @@ export function StepsSection() {
                   logic with a single click.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Step 3 */}
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
-            <div className="w-full md:w-1/2 flex justify-center">
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24 overflow-hidden py-4">
+            <motion.div
+              className="w-full md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: -50, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
               <div className="w-full max-w-sm aspect-square bg-zinc-100 dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-inner overflow-hidden relative">
                 <Image
                   src="/syntax-light.png"
@@ -103,8 +150,18 @@ export function StepsSection() {
                   className="object-contain p-6 hidden dark:block"
                 />
               </div>
-            </div>
-            <div className="w-full md:w-1/2 flex justify-center">
+            </motion.div>
+            <motion.div
+              className="w-full md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.1,
+              }}
+            >
               <div className="w-full max-w-sm flex flex-col gap-4">
                 <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center rounded-xl font-bold text-xl mb-2">
                   3
@@ -118,7 +175,7 @@ export function StepsSection() {
                   history to resume later.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

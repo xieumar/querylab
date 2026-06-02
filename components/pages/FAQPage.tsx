@@ -31,6 +31,26 @@ const faqs = [
     answer:
       "Currently, QueryLab natively generates ANSI SQL `WHERE` clauses and valid MongoDB JSON filter objects. You can also export the raw rule tree state as JSON.",
   },
+  {
+    question: "Is QueryLab open source?",
+    answer:
+      "QueryLab is an open-source project. We encourage community contributions, bug reports, and feature requests on our GitHub repository.",
+  },
+  {
+    question: "Can I use my own UI components?",
+    answer:
+      "Absolutely! The core logic and state management are separated from the presentation layer. You can easily swap out the default Tailwind UI components with your own design system.",
+  },
+  {
+    question: "Does it support dark mode?",
+    answer:
+      "Yes, QueryLab comes with built-in dark mode support. It automatically detects your system preferences and allows manual toggling for a seamless experience.",
+  },
+  {
+    question: "How does the schema validation work?",
+    answer:
+      "Validation happens in real-time as you build the query. If a rule violates the schema (for example, entering a string into a number field), QueryLab highlights the error and prevents exporting invalid queries.",
+  },
 ];
 
 export function FAQPage() {

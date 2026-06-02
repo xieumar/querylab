@@ -110,6 +110,55 @@ const userSchema = [
               </div>
             </div>
           </section>
+
+          {/* Section 4 */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">
+              4. Advanced State Management
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-400 mb-6 leading-relaxed">
+              QueryLab leverages Zustand for robust, predictable state
+              management. The entire query tree is fully reactive.
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-zinc-600 dark:text-zinc-400 mb-6">
+              <li>
+                <strong>Undo/Redo:</strong> Build with confidence knowing you
+                can revert accidental deletions.
+              </li>
+              <li>
+                <strong>Hydration:</strong> Load existing queries from your
+                backend seamlessly by passing a JSON string to the store.
+              </li>
+              <li>
+                <strong>Performance:</strong> Subscriptions are highly
+                optimized, ensuring only modified components re-render during
+                complex drag-and-drop operations.
+              </li>
+            </ul>
+          </section>
+
+          {/* Section 5 */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">
+              5. Customizing Operators
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-400 mb-4 leading-relaxed">
+              You can easily extend the engine to support custom database
+              operators (like PostGIS spatial queries or Elasticsearch fuzzy
+              matching).
+            </p>
+            <div className="bg-zinc-100 dark:bg-zinc-900 p-4 rounded-lg font-mono text-sm text-zinc-800 dark:text-zinc-300 overflow-x-auto">
+              {`// Adding a custom operator
+import { registerOperator } from 'querylab/core';
+
+registerOperator({
+  id: 'near',
+  label: 'Is Near',
+  supportedTypes: ['location'],
+  sqlGenerator: (field, value) => \`ST_DWithin(\${field}, \${value}, 1000)\`
+});`}
+            </div>
+          </section>
         </div>
       </div>
     </div>

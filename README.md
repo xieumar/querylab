@@ -1,3 +1,5 @@
+**Video Demo:** https://drive.google.com/file/d/1u0p_6ikg1hwDUtCPHgrMpZQAGwFCNh2m/view?usp=sharing
+
 # QueryLab
 
 QueryLab is a highly interactive, visual query builder that allows users to construct complex database and API queries through a polished, graphical interface instead of writing raw query syntax manually.

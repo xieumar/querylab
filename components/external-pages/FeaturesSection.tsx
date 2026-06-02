@@ -1,21 +1,36 @@
+"use client";
+
 import { Database, Filter, Code2, Download } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export function FeaturesSection() {
   return (
     <section className="relative w-full bg-zinc-50 dark:bg-zinc-900/50 py-32 px-4 sm:px-6 lg:px-8 border-y border-zinc-200 dark:border-zinc-800">
       <div className="container mx-auto max-w-7xl flex flex-col items-center">
-        <div className="text-center mb-5 md:mb-15">
+        <motion.div
+          className="text-center mb-5 md:mb-15"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
             Why Choose QueryLab?
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground">
             Smart Features to Elevate Your Data Workflow
           </p>
-        </div>
+        </motion.div>
 
         <div className="relative w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
-          <div className="hidden lg:flex w-full aspect-[16/10] bg-zinc-200 dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-700 overflow-hidden relative z-10 flex-col">
+          <motion.div
+            className="hidden lg:flex w-full aspect-[16/10] bg-zinc-200 dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-700 overflow-hidden relative z-10 flex-col"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
             <div className="w-full h-10 bg-zinc-300 dark:bg-zinc-900 flex items-center px-4 gap-2 border-b border-zinc-400 dark:border-zinc-700 shrink-0">
               <div className="w-3 h-3 rounded-full bg-red-400" />
               <div className="w-3 h-3 rounded-full bg-amber-400" />
@@ -37,12 +52,19 @@ export function FeaturesSection() {
                 priority
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* Floating Cards (Outside the window, flowing out a bit) */}
 
           {/* Top Left */}
-          <div className="hidden lg:flex absolute lg:-left-12 xl:-left-20 top-[10%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3 transition-transform hover:-translate-y-1">
+          <motion.div
+            className="hidden lg:flex absolute lg:-left-12 xl:-left-20 top-[10%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3"
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          >
             <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
               <Database className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
@@ -53,10 +75,17 @@ export function FeaturesSection() {
                 and auto-completing dropdowns.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Bottom Left */}
-          <div className="hidden lg:flex absolute lg:-left-8 xl:-left-10 bottom-[10%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3 transition-transform hover:-translate-y-1">
+          <motion.div
+            className="hidden lg:flex absolute lg:-left-8 xl:-left-10 bottom-[10%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3"
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          >
             <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
               <Filter className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             </div>
@@ -67,10 +96,17 @@ export function FeaturesSection() {
                 effortlessly.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Top Right */}
-          <div className="hidden lg:flex absolute lg:-right-12 xl:-right-24 top-[20%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3 transition-transform hover:-translate-y-1">
+          <motion.div
+            className="hidden lg:flex absolute lg:-right-12 xl:-right-24 top-[20%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3"
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          >
             <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center">
               <Download className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
@@ -81,10 +117,17 @@ export function FeaturesSection() {
                 history to resume later.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Bottom Right */}
-          <div className="hidden lg:flex absolute lg:-right-8 xl:-right-16 bottom-[5%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3 transition-transform hover:-translate-y-1">
+          <motion.div
+            className="hidden lg:flex absolute lg:-right-8 xl:-right-16 bottom-[5%] z-20 w-64 backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 p-5 rounded-xl shadow-xl border border-zinc-200/50 dark:border-zinc-700/50 flex-col gap-3"
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+          >
             <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg flex items-center justify-center">
               <Code2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
@@ -95,7 +138,7 @@ export function FeaturesSection() {
                 configs as you build.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Mobile Fallback layout for cards */}
           <div className="lg:hidden mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">

@@ -45,7 +45,9 @@ export const parseQueryTree = (jsonString: string): QueryTree => {
     const result = QueryTreeSchema.safeParse(parsedJson);
 
     if (!result.success) {
-      throw new Error(`Invalid Query format: ${result.error.message}`);
+      throw new Error(
+        "The file format does not match a valid Query Builder structure."
+      );
     }
 
     return result.data as QueryTree;

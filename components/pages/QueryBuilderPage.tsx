@@ -78,12 +78,29 @@ export function QueryBuilderPage() {
       try {
         const content = event.target?.result as string;
         const parsedJson = JSON.parse(content);
+        let extractedDataset: any[] | null = null;
 
         if (Array.isArray(parsedJson)) {
+          extractedDataset = parsedJson;
+        } else if (
+          parsedJson &&
+          typeof parsedJson === "object" &&
+          parsedJson.type !== "group" &&
+          !parsedJson.logic
+        ) {
+          const arrayValues = Object.values(parsedJson).filter((v) =>
+            Array.isArray(v)
+          );
+          if (arrayValues.length > 0) {
+            extractedDataset = arrayValues[0] as any[];
+          }
+        }
+
+        if (extractedDataset) {
           // Uploaded a custom dataset
-          const newSchema = inferSchemaFromDataset(parsedJson);
+          const newSchema = inferSchemaFromDataset(extractedDataset);
           setSchema(newSchema);
-          setDataset(parsedJson);
+          setDataset(extractedDataset);
 
           // Clear current query to reset for new schema
           importQuery({
@@ -93,7 +110,7 @@ export function QueryBuilderPage() {
             children: [],
           });
 
-          toast.success(`Dataset loaded with ${parsedJson.length} rows.`);
+          toast.success(`Dataset loaded with ${extractedDataset.length} rows.`);
         } else {
           // Uploaded a query tree
           const newTree = parseQueryTree(content);

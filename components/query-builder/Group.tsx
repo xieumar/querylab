@@ -142,15 +142,30 @@ export function Group({ group, isRoot = false, onRunQuery }: GroupProps) {
             >
               <FolderPlus className="mr-1.5 h-4 w-4" /> Add inner group
             </Button>
-            {isRoot && onRunQuery && (
-              <Button
-                size="sm"
-                onClick={onRunQuery}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-9 font-medium"
-              >
-                <Play className="w-4 h-4 mr-2 fill-current" /> Run Query
-              </Button>
-            )}
+            {isRoot &&
+              onRunQuery &&
+              (() => {
+                const hasValidRules = (node: GroupType): boolean => {
+                  return node.children.some(
+                    (child) =>
+                      child.type === "rule" ||
+                      (child.type === "group" &&
+                        hasValidRules(child as GroupType))
+                  );
+                };
+                const canRunQuery = hasValidRules(group);
+
+                return (
+                  <Button
+                    size="sm"
+                    onClick={onRunQuery}
+                    disabled={!canRunQuery}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-9 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Play className="w-4 h-4 mr-2 fill-current" /> Run Query
+                  </Button>
+                );
+              })()}
           </div>
 
           {!isRoot && (

@@ -1,6 +1,11 @@
 "use client";
 
 import { useQueryStore } from "../../store/useQueryStore";
+import {
+  useSchemaStore,
+  inferSchemaFromDataset,
+} from "../../store/useSchemaStore";
+import { useDataStore } from "../../store/useDataStore";
 import { Group } from "../query-builder/Group";
 import { LivePreview } from "../query-builder/LivePreview";
 import { ResultsInspector } from "../query-builder/ResultsInspector";
@@ -23,6 +28,7 @@ import { Button } from "../ui/button";
 import { Download, Upload, Database, X } from "lucide-react";
 import { parseQueryTree } from "../../lib/schema";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const restrictToVerticalAxis: Modifier = ({ transform }) => {
   return {
@@ -33,6 +39,8 @@ const restrictToVerticalAxis: Modifier = ({ transform }) => {
 
 export function QueryBuilderPage() {
   const { tree, reorderNode, importQuery, pushHistory } = useQueryStore();
+  const { setSchema } = useSchemaStore();
+  const { setDataset } = useDataStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isResultsOpen, setIsResultsOpen] = useState(false);
   useKeyboardShortcuts();
@@ -69,13 +77,34 @@ export function QueryBuilderPage() {
     reader.onload = (event) => {
       try {
         const content = event.target?.result as string;
-        const newTree = parseQueryTree(content);
-        importQuery(newTree);
+        const parsedJson = JSON.parse(content);
+
+        if (Array.isArray(parsedJson)) {
+          // Uploaded a custom dataset
+          const newSchema = inferSchemaFromDataset(parsedJson);
+          setSchema(newSchema);
+          setDataset(parsedJson);
+
+          // Clear current query to reset for new schema
+          importQuery({
+            id: "root",
+            type: "group",
+            logic: "AND",
+            children: [],
+          });
+
+          toast.success(`Dataset loaded with ${parsedJson.length} rows.`);
+        } else {
+          // Uploaded a query tree
+          const newTree = parseQueryTree(content);
+          importQuery(newTree);
+          toast.success("Query imported successfully");
+        }
       } catch (error: unknown) {
         if (error instanceof Error) {
-          alert(error.message);
+          toast.error(`Import failed: ${error.message}`);
         } else {
-          alert("An error occurred");
+          toast.error("An invalid or corrupt file was uploaded.");
         }
       }
       if (fileInputRef.current) {
@@ -117,12 +146,16 @@ export function QueryBuilderPage() {
             />
             <Button
               variant="outline"
-              size="sm"
               onClick={() => fileInputRef.current?.click()}
+              className="h-10 bg-white dark:bg-zinc-950 shadow-sm border-zinc-200 dark:border-zinc-800"
             >
               <Upload className="w-4 h-4 mr-2" /> Import JSON
             </Button>
-            <Button variant="outline" size="sm" onClick={handleExport}>
+            <Button
+              variant="outline"
+              onClick={handleExport}
+              className="h-10 bg-white dark:bg-zinc-950 shadow-sm border-zinc-200 dark:border-zinc-800"
+            >
               <Download className="w-4 h-4 mr-2" /> Export
             </Button>
             <ThemeToggle />

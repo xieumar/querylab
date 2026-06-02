@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { useQueryStore } from "@/store/useQueryStore";
 import { useSchemaStore } from "@/store/useSchemaStore";
@@ -49,7 +50,7 @@ const TEMPLATES: Template[] = [
   {
     id: "high-value-electronics",
     title: "High-Value Electronics",
-    description: "Filters for available electronics priced over $500.",
+    description: "Filters for electronics priced over $500.",
     icon: <Filter className="w-6 h-6 text-emerald-500" />,
     schema: mockProductsSchema,
     query: {
@@ -67,13 +68,6 @@ const TEMPLATES: Template[] = [
         {
           id: "2",
           type: "rule",
-          field: "isAvailable",
-          operator: "equals",
-          value: "true",
-        },
-        {
-          id: "3",
-          type: "rule",
           field: "price",
           operator: "greater_than",
           value: 500,
@@ -82,11 +76,94 @@ const TEMPLATES: Template[] = [
     },
   },
   {
-    id: "complex-user-filter",
-    title: "Complex User Filter",
-    description:
-      "Nested logical groups finding pending viewers or inactive editors.",
+    id: "pending-viewers",
+    title: "Pending Viewers",
+    description: "Finds users with the viewer role who are still pending.",
     icon: <Layers className="w-6 h-6 text-indigo-500" />,
+    schema: mockUsersSchema,
+    query: {
+      id: "root",
+      type: "group",
+      logic: "AND",
+      children: [
+        {
+          id: "1",
+          type: "rule",
+          field: "role",
+          operator: "equals",
+          value: "viewer",
+        },
+        {
+          id: "2",
+          type: "rule",
+          field: "status",
+          operator: "equals",
+          value: "pending",
+        },
+      ],
+    },
+  },
+  {
+    id: "marketing-campaign",
+    title: "Marketing Campaign Targets",
+    description: "Identifies active users who haven't logged in recently.",
+    icon: <Database className="w-6 h-6 text-purple-500" />,
+    schema: mockUsersSchema,
+    query: {
+      id: "root",
+      type: "group",
+      logic: "AND",
+      children: [
+        {
+          id: "1",
+          type: "rule",
+          field: "status",
+          operator: "equals",
+          value: "active",
+        },
+        {
+          id: "2",
+          type: "rule",
+          field: "lastLogin",
+          operator: "less_than",
+          value: "2024-01-01",
+        },
+      ],
+    },
+  },
+  {
+    id: "low-stock-alerts",
+    title: "Low Stock Alerts",
+    description: "Finds products that are low in stock or out of stock.",
+    icon: <Filter className="w-6 h-6 text-red-500" />,
+    schema: mockProductsSchema,
+    query: {
+      id: "root",
+      type: "group",
+      logic: "OR",
+      children: [
+        {
+          id: "1",
+          type: "rule",
+          field: "stockCount",
+          operator: "less_than",
+          value: 10,
+        },
+        {
+          id: "2",
+          type: "rule",
+          field: "isAvailable",
+          operator: "equals",
+          value: "false",
+        },
+      ],
+    },
+  },
+  {
+    id: "premium-users",
+    title: "Premium Users",
+    description: "Filters users with high engagement or premium roles.",
+    icon: <Layers className="w-6 h-6 text-amber-500" />,
     schema: mockUsersSchema,
     query: {
       id: "root",
@@ -94,51 +171,74 @@ const TEMPLATES: Template[] = [
       logic: "OR",
       children: [
         {
-          id: "g1",
-          type: "group",
-          logic: "AND",
-          children: [
-            {
-              id: "1",
-              type: "rule",
-              field: "role",
-              operator: "equals",
-              value: "viewer",
-            },
-            {
-              id: "2",
-              type: "rule",
-              field: "status",
-              operator: "equals",
-              value: "pending",
-            },
-          ],
+          id: "1",
+          type: "rule",
+          field: "role",
+          operator: "equals",
+          value: "admin",
         },
         {
-          id: "g2",
-          type: "group",
-          logic: "AND",
-          children: [
-            {
-              id: "3",
-              type: "rule",
-              field: "role",
-              operator: "equals",
-              value: "editor",
-            },
-            {
-              id: "4",
-              type: "rule",
-              field: "status",
-              operator: "equals",
-              value: "inactive",
-            },
-          ],
+          id: "2",
+          type: "rule",
+          field: "age",
+          operator: "greater_than",
+          value: 30,
         },
       ],
     },
   },
 ];
+
+function QueryPreview({ node }: { node: any }) {
+  if (node.type === "rule") {
+    const displayValue = String(node.value);
+    const opDisplay = node.operator.replace(/_/g, " ");
+    return (
+      <div className="inline-flex items-center gap-1.5 text-[11px] bg-white dark:bg-zinc-800 px-2 py-1 rounded-md border border-zinc-200 dark:border-zinc-700 shadow-sm">
+        <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+          {node.field}
+        </span>
+        <span className="text-zinc-400 dark:text-zinc-500 font-mono text-[10px]">
+          {opDisplay}
+        </span>
+        <span
+          className="text-primary font-medium truncate max-w-[80px]"
+          title={displayValue}
+        >
+          {displayValue}
+        </span>
+      </div>
+    );
+  }
+
+  if (node.type === "group") {
+    return (
+      <div className="flex flex-wrap items-center gap-y-2 gap-x-1.5">
+        {node.children.map((child: any, i: number) => (
+          <React.Fragment key={child.id}>
+            {child.type === "group" && (
+              <span className="text-zinc-400 dark:text-zinc-500 text-lg leading-none">
+                (
+              </span>
+            )}
+            <QueryPreview node={child} />
+            {child.type === "group" && (
+              <span className="text-zinc-400 dark:text-zinc-500 text-lg leading-none">
+                )
+              </span>
+            )}
+            {i < node.children.length - 1 && (
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mx-0.5">
+                {node.logic}
+              </span>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  }
+  return null;
+}
 
 export function TemplatesPage() {
   const router = useRouter();
@@ -171,14 +271,20 @@ export function TemplatesPage() {
               key={template.id}
               className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between transition-shadow hover:shadow-md"
             >
-              <div>
+              <div className="flex-1 flex flex-col">
                 <div className="w-12 h-12 bg-zinc-100 dark:bg-zinc-900 rounded-xl flex items-center justify-center mb-6">
                   {template.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-3">{template.title}</h3>
-                <p className="text-muted-foreground mb-8">
+                <p className="text-muted-foreground mb-6">
                   {template.description}
                 </p>
+                <div className="mb-8 p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-100 dark:border-zinc-800/50 flex-1">
+                  <h4 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
+                    Query Preview
+                  </h4>
+                  <QueryPreview node={template.query} />
+                </div>
               </div>
               <Button
                 onClick={() => handleUseTemplate(template)}

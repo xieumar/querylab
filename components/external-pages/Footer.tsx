@@ -1,25 +1,15 @@
 import Link from "next/link";
 import { Database } from "lucide-react";
 import { Button } from "../ui/button";
+import { ShaderGridBackground } from "./ShaderGridBackground";
 
 export function Footer() {
   return (
     <footer className="w-full flex flex-col">
       {/* Dark CTA Section */}
       <div className="relative w-full bg-zinc-950 py-24 overflow-hidden border-t border-zinc-900">
-        <div className="absolute inset-0 border-zinc-800 bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_60%,transparent_100%)]" />
+        <ShaderGridBackground forceTheme="dark" />
 
-        <div className="absolute inset-0 overflow-hidden pointer-events-none flex justify-center">
-          <div className="relative w-full max-w-[1400px] h-full opacity-50">
-            <div className="absolute top-[0rem] left-[8rem] w-[4rem] h-[8rem] bg-zinc-900" />
-            <div className="absolute top-[4rem] left-[16rem] w-[12rem] h-[4rem] bg-zinc-900" />
-            <div className="absolute bottom-[4rem] left-[12rem] w-[8rem] h-[8rem] bg-zinc-900" />
-
-            <div className="absolute top-[0rem] right-[24rem] w-[8rem] h-[4rem] bg-zinc-900" />
-            <div className="absolute top-[8rem] right-[8rem] w-[8rem] h-[8rem] bg-zinc-900" />
-            <div className="absolute bottom-[0rem] right-[16rem] w-[4rem] h-[8rem] bg-zinc-900" />
-          </div>
-        </div>
         <div className="relative z-10 container mx-auto px-4 text-center flex flex-col items-center gap-6">
           <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
             Start Building Complex Queries Today!

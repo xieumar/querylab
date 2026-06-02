@@ -97,7 +97,9 @@ function compileShader(
   return shader;
 }
 
-export function ShaderGridBackground() {
+export function ShaderGridBackground({
+  forceTheme,
+}: { forceTheme?: "light" | "dark" } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { resolvedTheme } = useTheme();
 
@@ -200,7 +202,10 @@ export function ShaderGridBackground() {
 
       gl.uniform2f(resolutionLoc, canvas.width, canvas.height);
       gl.uniform2f(mouseLoc, mouseX, mouseY);
-      gl.uniform1f(themeLoc, resolvedTheme === "dark" ? 1.0 : 0.0);
+      gl.uniform1f(
+        themeLoc,
+        (forceTheme || resolvedTheme) === "dark" ? 1.0 : 0.0
+      );
       gl.uniform1f(timeLoc, (Date.now() - startTime) / 1000.0);
       gl.uniform1f(pixelRatioLoc, window.devicePixelRatio);
 
@@ -216,7 +221,7 @@ export function ShaderGridBackground() {
       document.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [resolvedTheme]);
+  }, [resolvedTheme, forceTheme]);
 
   return (
     <canvas
